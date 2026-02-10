@@ -13,7 +13,6 @@ phases:
       - terraform -version
   pre_build:
     commands:
-      - cd infra
       - terraform fmt -check
       - terraform init -no-color
       - terraform validate -no-color
@@ -24,6 +23,6 @@ phases:
 
 artifacts:
   files:
-    - infra/tfplan
-    - infra/plan.txt
+    - tfplan
+    - plan.txt
   discard-paths: no
