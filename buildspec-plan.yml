@@ -1,0 +1,29 @@
+version: 0.2
+
+env:
+  variables:
+    TF_IN_AUTOMATION: "true"
+    TF_INPUT: "false"
+
+phases:
+  install:
+    commands:
+      - curl -sSLo terraform.zip https://releases.hashicorp.com/terraform/1.7.5/terraform_1.7.5_linux_amd64.zip
+      - unzip -o terraform.zip -d /usr/local/bin
+      - terraform -version
+  pre_build:
+    commands:
+      - cd infra
+      - terraform fmt -check
+      - terraform init -no-color
+      - terraform validate -no-color
+  build:
+    commands:
+      - terraform plan -no-color -out=tfplan
+      - terraform show -no-color tfplan > plan.txt
+
+artifacts:
+  files:
+    - infra/tfplan
+    - infra/plan.txt
+  discard-paths: no
